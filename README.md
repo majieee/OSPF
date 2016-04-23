@@ -49,4 +49,32 @@ OSPF ADJACENCY :
 
 DR/BDR：
 
-选举DR/BDR的原则： 首先看接口优先级，IP OSPF PRIORITY(0~255)，默认为1 ，数值越大优先级越高，为0 代表不参与选举
+选举DR/BDR的原则： 首先看接口优先级，IP OSPF PRIORITY(0~255)，默认为1 ，数值越大优先级越高，为0 代表不参与选举，然后看ROUTER-ID的大小
+
+选举有时间限制，不能超过wait timer == 4 hello interval ,超时之后不再重新举行选举
+
+OSPF数据包交换过程：
+
+HELLO PACKETS -----> DBD (DATABASE DESCRIPTION PACKETES) ----->LSR (LINK-STATE REQUEST) ---->LSU (LINK-STATE UPDATE)
+----->LSACK (LINK-STATE ACKNOWLEDGE)
+
+OSPF 启动过程：
+
+1 DOWN ---- 此状态尚未收到HELLO PACKTES,但可以发送HELLO PACKTES
+
+2 INIT ---- 此状态已经收到HELLO PACKTES，但对方尚未将自己列为邻居
+
+3 TWO-WAY---此状态双方已经交换了HELLO PACKETS，也互相列为邻居，DR/BDR也已经选举完毕，对于DR-OTHER ，不再进入下面的过程。
+
+4 EXSTART---对于DR/BDR,在交换DBD之前，需要确定主从路由器，根据ROUTER-ID大小确定DBD的发送先后顺序
+
+5 EXCHANGE--主从确定之后，开始交换DBD
+
+6 LOADING --DBD收到后，进入LSR,LSU,LSACK过程
+
+7 FULL -----收到所有对方的LSU，并放入自己的LSDB之后，进入LSDB收敛状态，实现数据库同步，路由表仍然处于计算状态
+
+8 ATTEMPT ---对于组播环境没有此过程，对于非广播环境需要指定邻居地址，发送单播HELLO PACKETS
+
+
+
