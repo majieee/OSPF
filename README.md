@@ -76,5 +76,22 @@ OSPF 启动过程：
 
 8 ATTEMPT ---对于组播环境没有此过程，对于非广播环境需要指定邻居地址，发送单播HELLO PACKETS
 
+OSPF 网络类型（Network Type）： 实际上就是OSPF接口所处的数据链路层类型（LAYER 2 ）
+
+1 广播 ，非广播 两种类型，广播都是必须选择DR/BDR，但是广播建立邻居是自动的（通过组播包
+224.0.0.5），非广播必须手动指定对端邻居的地址。
+
+2 点到点，点到多点类型，DR/BDR无需选择，因为不存在多路访问网段的问题，建立邻居则是自动的。
+
+OSPF 链路类型（Link Type）：首先这个类型和OSPF 邻居相关，和数据链路层介质也有关联，但和网络类型没有对应的关系
+
+1 Stub Network Link ----- 该网段只有一个OSPF ROUTER， 没有邻居，一般LOOPBACK 地址的OSPF接口被认为是Stub Network Link,32 mask.
+
+2 Point to Point Link ---- 接口网络类型为P2P,P2MP的接口类型被认为是是P2P
+
+3 Transit Link  ----- 存在OSPF邻居的接口类型
+
+4  Virtual Link ---- 虚链路，实际上就是手工配置地址的P2P LINK
+
 
 
