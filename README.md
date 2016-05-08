@@ -107,7 +107,21 @@ OSPF 末节区域 ---- 1 LSA 网络泛洪 增加网络负荷，降低ROUTER处�
 
 4  Totally Not So Stub Area ----其余和NSSA一致，不同在于其它区域的汇总路由也不可以从ABR发进来，所以需要自动发送一条默认路由。
 
+OSPF LSA Type: 
 
+LSA1 --- Route Link , OSPF 路由器产生，包含该路由器所有OSPF接口的打包信息，只能在区域内发送
+
+LSA2 --- Network Link, OSPF DR 产生，相当于每个网段产生一条LSA2
+
+LSA3 --- Summay Link , ABR 产生，将区域内LSA1进行汇总简化发往外区域
+
+LSA4 --- ASBR Summary Link ,ABR产生，发往外部区域，告知本区域内ASBR的Router-ID,配合LSA5使用，LSA5的Router-ID为ASBR的，ABR不能修改，外部区域路由器无法获知，必须由ABR发送一条LSA4告知如何到达ASBR
+
+LSA5 --- External Link, 由ASBR发送，包含ASBR 的Router-ID 和Forward Address,外部路由重分布进入OSPF域后，ASBR需要告知如何到达该
+外部路由
   
+如何确定forward address,分两种情况：
 
+1.ASBR到外部路由的下一跳地址就是forward address，如果该网段在OSPF进程中，则通过LSA5，所有OSPF路由器均可以直接路由到该forward address(10.3.1.5)
 
+2. 如果该地址网段不在OSPF进程中，则forward address= 0.0.0.0,所有OSPF路由器通过外部LSA的Router-ID(4.4.4.4)去往外部路由
