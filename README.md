@@ -122,6 +122,8 @@ LSA5 --- External Link, 由ASBR发送，包含ASBR 的Router-ID 和Forward Addre
   
 如何确定forward address,分两种情况：
 
-1.ASBR到外部路由的下一跳地址就是forward address，如果该网段在OSPF进程中，则通过LSA5，所有OSPF路由器均可以直接路由到该forward address(10.3.1.5)
+1 ASBR到外部路由的下一跳地址就是forward address，如果该网段在OSPF进程中，则通过LSA5，所有OSPF路由器均可以直接路由到该forward address(10.3.1.5)
 
-2. 如果该地址网段不在OSPF进程中，则forward address= 0.0.0.0,所有OSPF路由器通过外部LSA的Router-ID(4.4.4.4)去往外部路由
+2 如果该地址网段不在OSPF进程中，则forward address= 0.0.0.0,所有OSPF路由器通过外部LSA的Router-ID(4.4.4.4)去往外部路由
+
+OSPF 虚链路 ----- 对于无法直连到AREA0的区域，需要将AREA0扩展到与其相邻的状态。扩展的这个区域称为transit area，该区域的两个ABR之间的LINK 成为virtual link. 虚链路也要建立邻居，但是不会交换HELLO 包
